@@ -1,0 +1,165 @@
+openapi: 3.0.3
+info:
+  title: Library API
+  version: 0.0.0
+paths:
+  /api/author:
+    get:
+      operationId: api_author_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+          description: ''
+  /api/author/{id}/:
+    get:
+      operationId: api_author_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+          description: ''
+  /api/book:
+    get:
+      operationId: api_book_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+          description: ''
+  /api/book/{id}/:
+    get:
+      operationId: api_book_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        name:
+          type: string
+          nullable: true
+          maxLength: 100
+        surname:
+          type: string
+          nullable: true
+          maxLength: 100
+        image:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - pk
+    Book:
+      type: object
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        title:
+          type: string
+          nullable: true
+          maxLength: 250
+        subtitle:
+          type: string
+          nullable: true
+          maxLength: 250
+        author:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        isbn:
+          type: string
+          nullable: true
+          maxLength: 13
+        body:
+          type: string
+          nullable: true
+      required:
+      - author
+      - pk
+    Nested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          maxLength: 100
+        surname:
+          type: string
+          nullable: true
+          maxLength: 100
+        image:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - id
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

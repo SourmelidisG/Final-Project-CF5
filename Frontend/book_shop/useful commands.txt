@@ -1,0 +1,5 @@
+# create a react aplication 
+npx create-react-app <name>
+
+# use sfc for creation of components
+
